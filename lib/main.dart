@@ -1,6 +1,9 @@
 import 'package:chores/screens/login_screen/login_screen.dart';
 import 'package:chores/screens/welcome_screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final storage = new FlutterSecureStorage();
 
 void main() {
   runApp(const MyApp());
