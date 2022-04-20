@@ -1,4 +1,5 @@
-import 'package:chores/screens/welcome_screen/welcome_screen_body.dart';
+import 'package:chores/screens/welcome_screen/main_image.dart';
+import 'package:chores/screens/welcome_screen/main_menu.dart';
 import 'package:flutter/material.dart';
 
 
@@ -10,8 +11,22 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return Scaffold(
-      body: WelcomeScreenBody(),
+    return  Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text("Chores Manager"),
+        centerTitle: true,
+      ),
+      body: Align(
+        child: Column(
+          children: const [
+            SizedBox(height: 25),
+            MainImage(),
+            SizedBox(height: 50),
+            MainMenu()
+          ],
+        ),
+      ),
     );
   }
 }

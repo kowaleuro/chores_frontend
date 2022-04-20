@@ -10,20 +10,29 @@ class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: size.height,
       width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          Container(
-            color: Colors.purpleAccent,
-          ),
-
-
+      Container(
+      width: size.height,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            borderRadius : BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+              bottomLeft: Radius.circular(0),
+              bottomRight: Radius.circular(0),
+            ),
+            color : Color.fromRGBO(238, 236, 240, 1),
+          )
+      ),
           child,
         ],
       ),
     );
   }
 }
+// Figma Flutter Generator Rectangle5Widget - RECTANGLE
