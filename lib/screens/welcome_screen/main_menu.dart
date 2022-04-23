@@ -1,3 +1,4 @@
+import 'package:chores/screens/register_screen/register_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
@@ -16,7 +17,9 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     // Figma Flutter Generator Frame3Widget - FRAME - VERTICAL
 
+    Size size = MediaQuery.of(context).size;
     return Container(
+      width: size.width-80,
       decoration: const BoxDecoration(
         borderRadius : BorderRadius.only(
           topLeft: Radius.circular(10),
@@ -39,6 +42,8 @@ class _MainMenuState extends State<MainMenu> {
           InkWell(
             onTap: () {myNavigatorKey.currentState?.pushNamed(LoginScreen.routeName);},
             child: Container(
+              height: 40,
+              width: size.width-160,
               decoration: const BoxDecoration(
                 borderRadius : BorderRadius.only(
                   topLeft: Radius.circular(10),
@@ -48,9 +53,9 @@ class _MainMenuState extends State<MainMenu> {
                 ),
                 color : Color.fromRGBO(81, 56, 135, 1),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 59, vertical: 14),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
 
                 children: const <Widget>[
                   Text('Login', textAlign: TextAlign.left, style: TextStyle(
@@ -67,8 +72,10 @@ class _MainMenuState extends State<MainMenu> {
             ),
         ), const SizedBox(height : 20),
           InkWell(
-            //onTap: () {myNavigatorKey.currentState?.pushNamed(RegisterScreen.routeName);},
+            onTap: () {myNavigatorKey.currentState?.pushNamed(RegisterScreen.routeName);},
             child: Container(
+            height: 40,
+            width: size.width-160,
               decoration: const BoxDecoration(
                 borderRadius : BorderRadius.only(
                   topLeft: Radius.circular(10),
@@ -78,9 +85,10 @@ class _MainMenuState extends State<MainMenu> {
                 ),
                 color : Color.fromRGBO(81, 56, 135, 1),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 59, vertical: 14),
+              //padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 14),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
 
                 children: const <Widget>[
                   Text('Register', textAlign: TextAlign.left, style: TextStyle(
@@ -97,6 +105,8 @@ class _MainMenuState extends State<MainMenu> {
             ),
           ), const SizedBox(height : 20),
           Container(
+            height: 40,
+            width: size.width-160,
             decoration: const BoxDecoration(
               borderRadius : BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -106,9 +116,10 @@ class _MainMenuState extends State<MainMenu> {
               ),
               color : Color.fromRGBO(81, 56, 135, 1),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 59, vertical: 14),
+            //padding: EdgeInsets.symmetric(horizontal: 59, vertical: 14),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
 
               children: const <Widget>[
                 Text('Remind password', textAlign: TextAlign.left, style: TextStyle(

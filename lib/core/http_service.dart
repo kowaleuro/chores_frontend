@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chores/main.dart';
+import 'package:chores/models/Place.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/User.dart';
@@ -45,6 +46,7 @@ class HttpService {
       final parsedJson = jsonDecode(res.body) as Map;
       if (parsedJson.containsKey('jwtToken')){
         await storage.write(key: 'jwt', value: parsedJson['jwtToken']);
+        await storage.write(key: 'email', value: email);
         return true;
       }else{
         return false;
@@ -53,6 +55,48 @@ class HttpService {
       return false;
     }
 
+  }
+
+  Future<bool> register(String email, String password, String nickname) async {
+    User user = User(nickname,email,password);
+    String url = ApiConstants.baseUrl + ApiConstants.registerEndpoint;
+    var res = await http.post(
+        Uri.parse(url),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Access-Control_Allow_Origin": "*",
+        },
+        body: json.encode({'email': user.email, 'password': user.password,'nickname': user.nickname}));
+    if (res.statusCode == 201) {
+      return true;
+    }else
+    {
+      return false;
+    }
+  }
+
+  Future<List<Place>?> getUserPlaces() async {
+    String? email = await storage.read(key: 'email');
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.userPlacesEndpoint;
+    final response = await http.get(
+        Uri.parse(url).replace(queryParameters: {
+          'email': email
+        }),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+    );
+    if(response.statusCode == 200){
+      var parsed = jsonDecode(response.body)["places"] as List;
+      List<Place> placeList = parsed.map((tagJson) => Place.fromJson(tagJson)).toList();
+      return placeList;
+    }else{
+      print('error');
+      return null;
+    }
   }
 
 }

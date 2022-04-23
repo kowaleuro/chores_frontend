@@ -10,7 +10,7 @@ class MainImage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Figma Flutter Generator Group1Widget - GROUP
     return SizedBox(
-      child: SvgPicture.asset('assets/images/main_menu.svg'),
+      child: SvgPicture.asset('assets/images/welcome.svg'),
     );
   }
 }

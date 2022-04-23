@@ -16,6 +16,7 @@ class WelcomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Chores Manager"),
         centerTitle: true,
+        backgroundColor: const Color.fromRGBO(81, 56, 135, 1),
       ),
       body: Align(
         child: Column(

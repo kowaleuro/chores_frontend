@@ -12,4 +12,7 @@ class ApiConstants{
 
   //register
   static const String registerEndpoint = '/api/v1/user-profile/register';
+
+  //UserPlaces
+  static const String userPlacesEndpoint = '/api/v1/place/usersPlaces';
 }
