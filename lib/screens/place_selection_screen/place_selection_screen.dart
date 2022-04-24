@@ -39,7 +39,14 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
                 return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      return Text(snapshot.data?[index].placeName ?? "got null");
+                      return InkWell(
+                        child: Center(
+                            child: Text(snapshot.data?[index].placeName ?? "got null")
+                        ),
+                        onTap:() {
+
+                        },
+                      );
                     }
                 );
               }else{
@@ -47,6 +54,38 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
               }
             }
           ),
+        ),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color.fromRGBO(81, 56, 135, 1),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(14)),
+          ),
+          onPressed: () { },
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+          elevation: 2.0),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        color: const Color.fromRGBO(121, 121, 121, 1),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            IconButton(
+              icon: const Icon(
+                  Icons.home,
+                  color: Colors.white,
+              ),
+              onPressed: () {},
+            ),
+            const Spacer(),
+            IconButton(icon: Icon(Icons.email), onPressed: () {},),
+          ],
+        ),
+        // shape: const AutomaticNotchedShape(
+        //     RoundedRectangleBorder(),
+        //     StadiumBorder(side: BorderSide())
+        // ),
         ),
     );
   }
