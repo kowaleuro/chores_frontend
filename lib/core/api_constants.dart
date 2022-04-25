@@ -15,4 +15,7 @@ class ApiConstants{
 
   //UserPlaces
   static const String userPlacesEndpoint = '/api/v1/place/usersPlaces';
+
+  //savePlace
+  static const String createPlaceEndpoint = '/api/v1/place/save';
 }

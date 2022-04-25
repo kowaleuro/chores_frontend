@@ -1,4 +1,6 @@
+import 'package:chores/screens/create_place_screen/create_place_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../../core/http_service.dart';
 import '../../main.dart';
@@ -79,21 +81,38 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
                     }
                 );
               }else{
-                return Text('error');
+                return Text('');
               }
             }
           ),
         ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromRGBO(81, 56, 135, 1),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(14)),
+      // floatingActionButton: FloatingActionButton(
+      //       //     backgroundColor: const Color.fromRGBO(81, 56, 135, 1),
+      //       //     shape: const RoundedRectangleBorder(
+      //       //         borderRadius: BorderRadius.all(Radius.circular(14)),
+      //       //     ),
+      //       //     onPressed: () { },
+      //       //     tooltip: 'Increment',
+      //       //     child: const Icon(Icons.add),
+      //       //     elevation: 2.0),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        backgroundColor: const Color.fromRGBO(81, 56, 135, 1),
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.add_circle),
+            label: 'Create',
+            onTap: () {myNavigatorKey.currentState?.pushNamed(CreatePlaceScreen.routeName);},
           ),
-          onPressed: () { },
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-          elevation: 2.0),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          SpeedDialChild(
+              child: const Icon(Icons.arrow_circle_right),
+              label: 'Join',
+              onTap: () {},
+          ),
+
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromRGBO(121, 121, 121, 1),
         child: Row(
@@ -108,13 +127,9 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
               onPressed: () {},
             ),
             const Spacer(),
-            IconButton(icon: Icon(Icons.email), onPressed: () {},),
           ],
         ),
-        // shape: const AutomaticNotchedShape(
-        //     RoundedRectangleBorder(),
-        //     StadiumBorder(side: BorderSide())
-        // ),
+        shape: const CircularNotchedRectangle(),
         ),
     );
   }

@@ -99,4 +99,25 @@ class HttpService {
     }
   }
 
+  Future<bool> createPlace(String placeName) async {
+
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.createPlaceEndpoint;
+    var res = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Accept": "application/json",
+        "content-type": "application/json",
+        "Access-Control_Allow_Origin": "*",
+        'Authorization': 'Bearer $token'
+      },
+      body: json.encode({'placeName': placeName})
+    );
+    if (res.statusCode == 201){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 }
