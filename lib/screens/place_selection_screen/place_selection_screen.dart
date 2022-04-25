@@ -25,6 +25,9 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    int count = -1;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Your Places"),
@@ -37,16 +40,42 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
             builder: (context, snapshot){
               if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
                 return ListView.builder(
-                    itemCount: snapshot.data!.length,
+                    itemCount: snapshot.data!.length*2+1,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        child: Center(
-                            child: Text(snapshot.data?[index].placeName ?? "got null")
-                        ),
-                        onTap:() {
-
-                        },
-                      );
+                      if (index % 2 == 1) {
+                        count ++;
+                        return Center(
+                          child: InkWell(
+                            child: Container(
+                                height: 140,
+                                width: size.width - 150,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                  color: Color.fromRGBO(81, 56, 135, 1),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    snapshot.data?[count].placeName ?? "got null",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 35,
+                                      fontFamily: 'Ubuntu',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                            ),
+                            onTap: () {},
+                          ),
+                        );
+                      }else{
+                        return SizedBox(height: 40,);
+                      }
                     }
                 );
               }else{

@@ -40,6 +40,7 @@ dependencies:
   flutter_svg: ^1.0.3
   json_serializable: ^6.1.6
   json_annotation: ^4.4.0
+  flutter_speed_dial: ^5.1.0
 
 dev_dependencies:
   flutter_test:
