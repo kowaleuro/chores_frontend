@@ -41,12 +41,10 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
             future: places,
             builder: (context, snapshot){
               if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-                return ListView.builder(
-                    itemCount: snapshot.data!.length*2+1,
-                    itemBuilder: (context, index) {
-                      if (index % 2 == 1) {
-                        count ++;
-                        return Center(
+                return ListView.separated(
+                    reverse: true,
+                    itemBuilder: (context, index) =>
+                        Center(
                           child: InkWell(
                             child: Container(
                                 height: 140,
@@ -62,7 +60,7 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    snapshot.data?[count].placeName ?? "got null",
+                                    snapshot.data?[index].placeName ?? "got null",
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       fontSize: 35,
@@ -74,14 +72,11 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
                             ),
                             onTap: () {},
                           ),
-                        );
-                      }else{
-                        return SizedBox(height: 40,);
-                      }
-                    }
-                );
+                        )
+                    , separatorBuilder: (contex, index) => const SizedBox(height: 40,)
+                    , itemCount: snapshot.data!.length);
               }else{
-                return Text('');
+                return const Text('');
               }
             }
           ),

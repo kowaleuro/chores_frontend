@@ -37,7 +37,7 @@ class _CreatePlaceScreenState extends State<CreatePlaceScreen> {
                 children: [
                   //const SizedBox(height: 15),
                   SvgPicture.asset(
-                      'assets/images/login.svg',
+                      'assets/images/createPlace.svg',
                       height: 140,
                   ),
                   const SizedBox(height: 20,),
