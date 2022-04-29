@@ -68,8 +68,11 @@ class _LoginState extends State<LoginScreen>{
                           const SizedBox(height: 40,),
                           Container(
                               child: TextFormField(
+                                obscureText: true,
+                                enableSuggestions: false,
+                                autocorrect: false,
                                 decoration: const InputDecoration(
-                                    labelText: 'Register',
+                                    labelText: 'Password',
                                 ),
                                 controller: TextEditingController(text: _password),
                                 onChanged: (val){
@@ -77,7 +80,7 @@ class _LoginState extends State<LoginScreen>{
                                 },
                                 validator: (value){
                                   if (value!.isEmpty){
-                                    return 'email is Empty';
+                                    return 'password is Empty';
                                   }
                                   return null;
                                 },
@@ -113,7 +116,7 @@ class _LoginState extends State<LoginScreen>{
   void _login() async{
     bool ret = (await HttpService().login(_email,_password));
     if (ret == true){
-      myNavigatorKey.currentState?.pushNamed(PlaceSelectionScreen.routeName);
+      myNavigatorKey.currentState?.pushReplacementNamed(PlaceSelectionScreen.routeName);
     }
   }
 }

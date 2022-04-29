@@ -1,5 +1,6 @@
 import 'package:chores/screens/create_place_screen/create_place_screen.dart';
 import 'package:chores/screens/login_screen/login_screen.dart';
+import 'package:chores/screens/place_screen/place_screen.dart';
 import 'package:chores/screens/place_selection_screen/place_selection_screen.dart';
 import 'package:chores/screens/register_screen/register_screen.dart';
 import 'package:chores/screens/welcome_screen/welcome_screen.dart';
@@ -54,6 +55,8 @@ class MyApp extends StatelessWidget {
               const PlaceSelectionScreen(),
           CreatePlaceScreen.routeName: (context) =>
               const CreatePlaceScreen(),
+          PlaceScreen.routeName: (context) =>
+              const PlaceScreen(),
 
         }
     );

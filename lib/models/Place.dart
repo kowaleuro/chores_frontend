@@ -1,16 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'Chore.dart';
+
 part 'Place.g.dart';
 
 @JsonSerializable()
 class Place {
-  Place(this.placeName,this.created,this.placeImageLink,this.placeId);
+  Place(this.placeName,this.created,this.placeImageLink,this.placeId,this.chores);
 
   late int? placeId;
   late final String placeName;
-  late final DateTime? created;
-  late final String? placeImageLink;
-  //late List<Chore>? chores;
+  late DateTime? created;
+  late String? placeImageLink;
+  late List<Chore>? chores;
 
   factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
 

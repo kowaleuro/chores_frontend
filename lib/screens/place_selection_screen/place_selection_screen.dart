@@ -5,6 +5,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '../../core/http_service.dart';
 import '../../main.dart';
 import '../../models/Place.dart';
+import '../place_screen/place_screen.dart';
 
 class PlaceSelectionScreen extends StatefulWidget {
   const PlaceSelectionScreen({Key? key}) : super(key: key);
@@ -28,13 +29,13 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    int count = -1;
 
     return Scaffold(
         appBar: AppBar(
           title: const Text("Your Places"),
           centerTitle: true,
           backgroundColor: const Color.fromRGBO(81, 56, 135, 1),
+          automaticallyImplyLeading: false
         ),
         body: Center(
           child: FutureBuilder<List<Place>?>(
@@ -42,7 +43,7 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
             builder: (context, snapshot){
               if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
                 return ListView.separated(
-                    reverse: true,
+                    reverse: false,
                     itemBuilder: (context, index) =>
                         Center(
                           child: InkWell(
@@ -70,7 +71,10 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
                                   ),
                                 )
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              myNavigatorKey.currentState?.pushNamed(PlaceScreen.routeName,
+                              arguments: {'placeId':snapshot.data?[index].placeId}
+                            );},
                           ),
                         )
                     , separatorBuilder: (contex, index) => const SizedBox(height: 40,)

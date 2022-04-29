@@ -1,3 +1,5 @@
+import 'package:chores/models/Chore.dart';
+import 'package:chores/models/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

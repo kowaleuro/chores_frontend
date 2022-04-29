@@ -85,6 +85,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 40,),
                           Container(
                               child: TextFormField(
+                                obscureText: true,
+                                enableSuggestions: false,
+                                autocorrect: false,
                                 decoration: const InputDecoration(
                                   labelText: 'Password',
                                 ),
@@ -103,7 +106,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           const SizedBox(height: 40,),
                           Container(
+
                               child: TextFormField(
+                                obscureText: true,
+                                enableSuggestions: false,
+                                autocorrect: false,
                                 decoration: const InputDecoration(
                                   labelText: 'Confirm Password',
                                 ),

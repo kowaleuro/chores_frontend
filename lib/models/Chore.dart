@@ -1,24 +1,20 @@
 import 'package:chores/models/status.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'Chore.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Chore{
+  Chore(this.choreId,this.choreName,this.status,this.when);
+
   late int? choreId;
   late String choreName;
   late Status status;
-  late DateTime? dateTime;
+  late DateTime? when;
 
-  Chore(this.choreName, this.status, this.dateTime);
+  factory Chore.fromJson(Map<String, dynamic> json) => _$ChoreFromJson(json);
 
-  Chore.fromJson(Map<String, dynamic> json){
-    choreId = json['choreId'];
-    choreName = json['choreName'];
-    status = json['status'];
-    dateTime = json['dateTime'];
-  }
-
-  Map<String, dynamic> toJson() => {
-    'choreName': choreName,
-    'status': status,
-    'dateTime': dateTime
-  };
+  Map<String, dynamic> toJson() => _$ChoreToJson(this);
 
 }
