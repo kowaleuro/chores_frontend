@@ -24,4 +24,6 @@ class ApiConstants{
 
   //getPlaceById
   static const String getPlaceByIdEndpoint = '/api/v1/place';
+
+  static const String joinPlaceEndpoint = '/api/v1/place/subscribeToPlace';
 }

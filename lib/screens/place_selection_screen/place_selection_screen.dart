@@ -1,3 +1,4 @@
+import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
 import 'package:chores/screens/create_place_screen/create_place_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -106,7 +107,10 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
           SpeedDialChild(
               child: const Icon(Icons.arrow_circle_right),
               label: 'Join',
-              onTap: () {},
+              // onTap: () {HttpService().joinPlace('bartek@test.pl', 52);},
+              onTap: () {myNavigatorKey.currentState?.pushNamed(CreateChoreScreen.routeName,
+                  arguments: {'placeId':52}
+              );},
           ),
 
         ],
@@ -120,10 +124,10 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
           children: <Widget>[
             IconButton(
               icon: const Icon(
-                  Icons.home,
+                  Icons.refresh,
                   color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {setState(() {});},
             ),
             const Spacer(),
           ],

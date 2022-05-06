@@ -1,3 +1,4 @@
+import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
 import 'package:chores/screens/create_place_screen/create_place_screen.dart';
 import 'package:chores/screens/login_screen/login_screen.dart';
 import 'package:chores/screens/place_screen/place_screen.dart';
@@ -24,6 +25,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Chores Manager',
         theme: ThemeData(
+            timePickerTheme: TimePickerThemeData(
+              backgroundColor: Colors.white,
+              dayPeriodBorderSide: const BorderSide(color: Color.fromRGBO(81, 56, 135, 1), width: 4),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                side: BorderSide(color: Color.fromRGBO(81, 56, 135, 1), width: 4),
+              ),
+              hourMinuteColor: MaterialStateColor.resolveWith((states) =>
+                states.contains(MaterialState.selected) ? const Color.fromRGBO(81, 56, 135, 1) : Colors.blueGrey.shade700),
+              hourMinuteTextColor: MaterialStateColor.resolveWith(
+                      (states) => states.contains(MaterialState.selected) ? Colors.white : Colors.black),
+              dialHandColor: Colors.blueGrey.shade700,
+              dayPeriodTextColor: const Color.fromRGBO(81, 56, 135, 1)
+
+            ),
             inputDecorationTheme:InputDecorationTheme(
                 floatingLabelStyle: const TextStyle(
                     fontSize: 20,
@@ -57,6 +73,9 @@ class MyApp extends StatelessWidget {
               const CreatePlaceScreen(),
           PlaceScreen.routeName: (context) =>
               const PlaceScreen(),
+          CreateChoreScreen.routeName: (context) =>
+              const CreateChoreScreen(),
+
 
         }
     );

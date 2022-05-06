@@ -139,7 +139,7 @@ class HttpService {
     );
     print(res.statusCode);
     print(res.body);
-    if (res.statusCode == 201) {
+    if (res.statusCode == 200) {
       return true;
     } else {
       return false;
@@ -189,6 +189,30 @@ class HttpService {
     } else {
       print('error');
       return null;
+    }
+  }
+
+  Future<bool> joinPlace(String email, int placeId) async {
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.joinPlaceEndpoint;
+    var res = await http.post(
+        Uri.parse(url).replace(queryParameters: {
+          'placeId': placeId
+        }.map((key, value) => MapEntry(key, value.toString()))),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Access-Control_Allow_Origin": "*",
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({'email':email})
+    );
+    print(res.statusCode);
+    print(res.body);
+    if (res.statusCode == 201) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
