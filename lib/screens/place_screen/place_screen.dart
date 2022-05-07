@@ -2,7 +2,9 @@
 import 'dart:collection';
 
 import 'package:chores/models/status.dart';
+import 'package:chores/screens/add_user_screen/add_user_screen.dart';
 import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
+import 'package:chores/screens/show_users_screen/show_users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -30,7 +32,6 @@ class _PlaceScreenState extends State<PlaceScreen> {
   LinkedHashMap<DateTime, List<Chore>>? _groupedEvents;
   Future<Place?>? place;
   late int placeId;
-  bool _isSelected = false;
 
   @override
   void initState(){
@@ -46,17 +47,17 @@ class _PlaceScreenState extends State<PlaceScreen> {
             ?.settings
             .arguments ?? <String, dynamic>{}) as Map;
         placeId = arguments['placeId'];
-        //getPlace(placeId);
+        var data = getPlace(placeId);
+        setState(() {
+          place = data;
+        });
       }
     });
     _selectedDay = _focusedDay;
     //_groupedEvents = ValueNotifier(_getEventsForDay(_selectedDay!)) as LinkedHashMap<DateTime, List<Chore>>?;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -78,7 +79,8 @@ class _PlaceScreenState extends State<PlaceScreen> {
   }
 
   Future<Place?> getPlace(int placeId) async {
-      return HttpService().getPlaceById(placeId);
+      var data = await HttpService().getPlaceById(placeId);
+      return data;
   }
 
 
@@ -89,15 +91,13 @@ class _PlaceScreenState extends State<PlaceScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final arguments =  (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
-    final int placeId = arguments['placeId'];
 
     return Scaffold(
       appBar: AppBar(
           title: FutureBuilder<Place?>(
-              future: getPlace(placeId),
+              future: place,
               builder: (context, snapshot){
-                if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.connectionState == ConnectionState.done) {
                   return Text(snapshot.data!.placeName + ' #' + snapshot.data!.placeId.toString() );
                 }else{
                   return Text('');
@@ -109,7 +109,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<Place?>(
-          future: getPlace(placeId),
+          future: place,
           builder: (context, snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
@@ -198,22 +198,38 @@ class _PlaceScreenState extends State<PlaceScreen> {
           SpeedDialChild(
             child: const Icon(Icons.attribution_rounded),
             label: 'Show Users',
-            //onTap: () {myNavigatorKey.currentState?.pushNamed(CreatePlaceScreen.routeName);},
+            onTap: () {
+              myNavigatorKey.currentState?.pushNamed(ShowUsersScreen.routeName,
+                  arguments: {'placeId': placeId}).then((value) {
+                setState(() {
+                  place = getPlace(placeId);
+                });
+              })
+              ;},
           ),
           SpeedDialChild(
             child: const Icon(Icons.add),
             label: 'Add users',
-            // onTap: () {HttpService().joinPlace('bartek@test.pl', 52);},
-            // onTap: () {myNavigatorKey.currentState?.pushNamed(CreateChoreScreen.routeName,
-            //     arguments: {'placeId':52}
-            // );},
+            onTap: () {
+              myNavigatorKey.currentState?.pushNamed(AddUserScreen.routeName,
+                  arguments: {'placeId': placeId}).then((value) {
+                setState(() {
+                  place = getPlace(placeId);
+                });
+              })
+              ;},
           ),
           SpeedDialChild(
             child: const Icon(Icons.create_outlined),
             label: 'Create chore',
-            onTap: () {myNavigatorKey.currentState?.pushNamed(CreateChoreScreen.routeName,
-                arguments: {'placeId': placeId}
-            );},
+            onTap: () {
+              myNavigatorKey.currentState?.pushNamed(CreateChoreScreen.routeName,
+                arguments: {'placeId': placeId}).then((value) {
+              setState(() {
+                place = getPlace(placeId);
+              });
+                })
+              ;},
           ),
 
         ],

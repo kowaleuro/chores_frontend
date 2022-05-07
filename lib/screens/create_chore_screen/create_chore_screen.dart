@@ -1,5 +1,6 @@
 import 'package:chores/models/Chore.dart';
 import 'package:chores/models/status.dart';
+import 'package:chores/screens/place_screen/place_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -148,14 +149,11 @@ class _CreateChoreScreenState extends State<CreateChoreScreen> {
 
   void _createChore(int placeId) async{
     //Chore chore
-    print(selectedTime);
-    print(_focusedDay);
     DateTime dateTime = DateTime(_selectedDay!.year,_selectedDay!.month,_selectedDay!.day,selectedTime.hour,selectedTime.minute);
-    print(dateTime);
     Chore chore = Chore(null, _choreName, Status.OPEN, dateTime);
     bool ret = (await HttpService().createChore(chore, placeId));
     if (ret == true){
-      myNavigatorKey.currentState?.pushNamed(PlaceSelectionScreen.routeName);
+      Navigator.pop(context);
     }
   }
 }

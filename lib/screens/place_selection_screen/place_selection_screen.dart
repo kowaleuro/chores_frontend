@@ -24,7 +24,7 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
   @override
   void initState(){
     super.initState();
-    places = HttpService().getUserPlaces();
+    //places = HttpService().getUserPlaces();
   }
 
   @override
@@ -40,7 +40,7 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
         ),
         body: Center(
           child: FutureBuilder<List<Place>?>(
-            future: places,
+            future: places = HttpService().getUserPlaces(),
             builder: (context, snapshot){
               if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
                 return ListView.separated(

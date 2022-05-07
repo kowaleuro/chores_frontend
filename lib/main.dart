@@ -1,9 +1,11 @@
+import 'package:chores/screens/add_user_screen/add_user_screen.dart';
 import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
 import 'package:chores/screens/create_place_screen/create_place_screen.dart';
 import 'package:chores/screens/login_screen/login_screen.dart';
 import 'package:chores/screens/place_screen/place_screen.dart';
 import 'package:chores/screens/place_selection_screen/place_selection_screen.dart';
 import 'package:chores/screens/register_screen/register_screen.dart';
+import 'package:chores/screens/show_users_screen/show_users_screen.dart';
 import 'package:chores/screens/welcome_screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -75,6 +77,10 @@ class MyApp extends StatelessWidget {
               const PlaceScreen(),
           CreateChoreScreen.routeName: (context) =>
               const CreateChoreScreen(),
+          AddUserScreen.routeName: (context) =>
+              const AddUserScreen(),
+          ShowUsersScreen.routeName: (context) =>
+              const ShowUsersScreen()
 
 
         }

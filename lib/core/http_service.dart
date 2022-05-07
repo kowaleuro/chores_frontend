@@ -215,4 +215,28 @@ class HttpService {
       return false;
     }
   }
+
+  Future<List<User>?> getUsersOfPlace(int placeId) async {
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.getUsersOfPlace;
+    final response = await http.get(
+        Uri.parse(url).replace(queryParameters: {
+          'placeId': placeId
+        }.map((key, value) => MapEntry(key, value.toString()))),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+    );
+    if (response.statusCode == 200) {
+      print('fdf');
+      var parsed = jsonDecode(response.body)["users"] as List;
+      List<User> usersList = parsed.map((tagJson) => User.fromJson(tagJson,''))
+          .toList();
+      return usersList;
+    } else {
+      print('error');
+      return null;
+    }
+  }
 }
