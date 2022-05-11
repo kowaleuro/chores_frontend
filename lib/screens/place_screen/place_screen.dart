@@ -1,9 +1,11 @@
 
 import 'dart:collection';
 
+import 'package:chores/models/User.dart';
 import 'package:chores/models/status.dart';
 import 'package:chores/screens/add_user_screen/add_user_screen.dart';
 import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
+import 'package:chores/screens/generating_screen/generating_screen.dart';
 import 'package:chores/screens/show_users_screen/show_users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -31,6 +33,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
 
   LinkedHashMap<DateTime, List<Chore>>? _groupedEvents;
   Future<Place?>? place;
+  Future<List<User>?>? users;
   late int placeId;
 
   @override
@@ -48,8 +51,10 @@ class _PlaceScreenState extends State<PlaceScreen> {
             .arguments ?? <String, dynamic>{}) as Map;
         placeId = arguments['placeId'];
         var data = getPlace(placeId);
+        var usersData = getUsers(placeId);
         setState(() {
           place = data;
+          users =usersData;
         });
       }
     });
@@ -81,6 +86,11 @@ class _PlaceScreenState extends State<PlaceScreen> {
   Future<Place?> getPlace(int placeId) async {
       var data = await HttpService().getPlaceById(placeId);
       return data;
+  }
+
+  Future<List<User>?> getUsers(int placeId) async {
+    var data = await HttpService().getUsersOfPlace(placeId);
+    return data;
   }
 
 
@@ -154,27 +164,90 @@ class _PlaceScreenState extends State<PlaceScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       Chore chore = _selectedEvents[index];
                       if(chore.status==Status.OPEN) {
-                        return ListTile(
+                        // return ListTile(
+                        //   title: Text(chore.choreName),
+                        //   // subtitle: Text(
+                        //   //     DateFormat("EEEE, dd MMMM, hh:mm aaa").format(
+                        //   //         chore.when!)),
+                        //   subtitle: Text(chore.userCloser?.nickname ?? ""),
+                        //   trailing: IconButton(
+                        //     color: Colors.red,
+                        //     icon: const Icon(Icons.highlight_off_outlined),
+                        //     onPressed: () {
+                        //       chore.status = Status.FINISHED;
+                        //       updateStatus(chore);
+                        //       setState(() {
+                        //         place = getPlace(placeId);
+                        //       });
+                        //       },),
+                        //   //leading: Icon(Icons.email),
+                        // );
+                        return  ExpansionTile(
                           title: Text(chore.choreName),
-                          subtitle: Text(
-                              DateFormat("EEEE, dd MMMM, hh:mm aaa").format(
-                                  chore.when!)),
-                          trailing: IconButton(
-                            color: Colors.red,
-                            icon: const Icon(Icons.highlight_off_outlined),
-                            onPressed: () {},),
-                          //leading: Icon(Icons.email),
+                          subtitle: Text(chore.userCloser?.nickname ?? ""),
+                          controlAffinity: ListTileControlAffinity.leading,
+                            trailing: IconButton(
+                              color: Colors.red,
+                              icon: const Icon(Icons.highlight_off_outlined),
+                              onPressed: () {
+                                chore.status = Status.FINISHED;
+                                updateStatus(chore);
+                                },),
+                          children: <Widget>[
+                            FutureBuilder(
+                              future: users,
+                              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshotUser) {
+                                if (snapshotUser.hasData && snapshotUser.connectionState == ConnectionState.done) {
+                                  return ListView.builder(
+                                    reverse: false,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index2) =>
+                                        Center(
+                                            child: ListTile(
+                                              title:
+                                                Text(
+                                                  snapshotUser.data?[index2].nickname ?? "got null",
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color.fromRGBO(81, 56, 135, 1)
+                                                  )
+                                                  ,
+                                                ),
+                                                trailing: IconButton(
+                                                  color: (snapshotUser.data?[index2].email == chore.userCloser?.email)
+                                                      ? const Color.fromRGBO(81, 56, 135, 1)
+                                                      : Colors.black26,
+                                                  icon:  const Icon(Icons.person),
+                                                  onPressed: () {
+                                                    if((snapshotUser.data?[index2].email != chore.userCloser?.email)) {
+                                                      subscribeUser(
+                                                          chore.choreId,
+                                                          snapshotUser
+                                                              .data?[index2]
+                                                              .email);
+                                                    }
+                                                    // setState(() {
+                                                    //   place = getPlace(placeId);
+                                                    // });
+                                                  }
+                                                  )
+                                            )
+                                        ),
+                                      itemCount: snapshotUser.data!.length);
+                                }
+                                else {
+                                  return const Text('');
+                                }
+                              },
+                            ),
+                          ],
                         );
                       }else{
                         return ListTile(
                           title: Text(chore.choreName),
-                          subtitle: Text(
-                              DateFormat("EEEE, dd MMMM, yyyy").format(
-                                  chore.when!)),
-                          trailing: IconButton(
-                            color: Colors.green,
-                            icon: const Icon(Icons.check_circle_outline_outlined),
-                            onPressed: () {},),
+                          subtitle: Text(chore.userCloser?.nickname ?? ""),
+                          trailing: const Icon(Icons.check_circle_outline_outlined,
+                            color: Colors.green),
                         );
                       }
                       }
@@ -220,6 +293,18 @@ class _PlaceScreenState extends State<PlaceScreen> {
               ;},
           ),
           SpeedDialChild(
+            child: const Icon(Icons.settings_suggest_outlined),
+            label: 'Generate',
+            onTap: () {
+              myNavigatorKey.currentState?.pushNamed(GeneratingScreen.routeName,
+                  arguments: {'placeId': placeId}).then((value) {
+                setState(() {
+                  place = getPlace(placeId);
+                });
+              })
+              ;},
+          ),
+          SpeedDialChild(
             child: const Icon(Icons.create_outlined),
             label: 'Create chore',
             onTap: () {
@@ -254,6 +339,23 @@ class _PlaceScreenState extends State<PlaceScreen> {
         shape: const CircularNotchedRectangle(),
       ),
     );
+  }
+
+  void updateStatus(Chore chore) async{
+    //Chore chore
+   await HttpService().updateChoreStatus(chore);
+   setState(() {
+     place = getPlace(placeId);
+   });
+  }
+
+  void subscribeUser(int? choreId, String email) async {
+    if (choreId != null) {
+      await HttpService().subscribeUserToChore(choreId, email);
+      setState(() {
+        place = getPlace(placeId);
+      });
+    }
   }
 }
 

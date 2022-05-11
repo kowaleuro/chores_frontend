@@ -11,6 +11,9 @@ Chore _$ChoreFromJson(Map<String, dynamic> json) => Chore(
       json['choreName'] as String,
       $enumDecode(_$StatusEnumMap, json['status']),
       json['when'] == null ? null : DateTime.parse(json['when'] as String),
+      json['userCloser'] == null
+          ? null
+          : User.fromJson(json['userCloser'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ChoreToJson(Chore instance) => <String, dynamic>{
@@ -18,6 +21,7 @@ Map<String, dynamic> _$ChoreToJson(Chore instance) => <String, dynamic>{
       'choreName': instance.choreName,
       'status': _$StatusEnumMap[instance.status],
       'when': instance.when?.toIso8601String(),
+      'userCloser': instance.userCloser?.toJson(),
     };
 
 const _$StatusEnumMap = {

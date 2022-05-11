@@ -150,7 +150,7 @@ class _CreateChoreScreenState extends State<CreateChoreScreen> {
   void _createChore(int placeId) async{
     //Chore chore
     DateTime dateTime = DateTime(_selectedDay!.year,_selectedDay!.month,_selectedDay!.day,selectedTime.hour,selectedTime.minute);
-    Chore chore = Chore(null, _choreName, Status.OPEN, dateTime);
+    Chore chore = Chore(null, _choreName, Status.OPEN, dateTime,null);
     bool ret = (await HttpService().createChore(chore, placeId));
     if (ret == true){
       Navigator.pop(context);

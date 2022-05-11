@@ -11,7 +11,9 @@ class HttpService {
 
   Future<bool> login(String email, String password) async {
     bool ifLogged = false;
-    User user = User("", email, password);
+    //User user = User("", email, password);
+    User user = User("", email);
+    user.password = password;
     String url = ApiConstants.baseUrl + ApiConstants.loginEndpoint;
     var res = await http.post(
         Uri.parse(url),
@@ -57,7 +59,9 @@ class HttpService {
   }
 
   Future<bool> register(String email, String password, String nickname) async {
-    User user = User(nickname, email, password);
+    //User user = User(nickname, email, password);
+    User user = User("", email);
+    user.password = password;
     String url = ApiConstants.baseUrl + ApiConstants.registerEndpoint;
     var res = await http.post(
         Uri.parse(url),
@@ -136,9 +140,8 @@ class HttpService {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode(chore.toJson())
+        //body: json.encode({'choreId': chore.choreId, 'choreName': chore.choreName, 'status': chore.status.toString(), 'when': chore.when?.toIso8601String()})
     );
-    print(res.statusCode);
-    print(res.body);
     if (res.statusCode == 200) {
       return true;
     } else {
@@ -231,12 +234,105 @@ class HttpService {
     if (response.statusCode == 200) {
       print('fdf');
       var parsed = jsonDecode(response.body)["users"] as List;
-      List<User> usersList = parsed.map((tagJson) => User.fromJson(tagJson,''))
+      //List<User> usersList = parsed.map((tagJson) => User.fromJson(tagJson,''))
+      List<User> usersList = parsed.map((tagJson) => User.fromJson(tagJson))
           .toList();
       return usersList;
     } else {
       print('error');
       return null;
+    }
+  }
+
+  Future<bool> updateChoreStatus(Chore chore) async{
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.changeChoreStatus;
+    print('gfg');
+    var res = await http.post(
+        Uri.parse(url),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Access-Control_Allow_Origin": "*",
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode(chore.toJson())
+    );
+    if (res.statusCode == 202) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  Future<bool> subscribeUserToChore(int choreId, String email) async{
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.subscribeToChore;
+    print('gfg');
+    var res = await http.post(
+      Uri.parse(url).replace(queryParameters: {
+        'choreId': choreId,
+        'email': email
+      }.map((key, value) => MapEntry(key, value.toString()))),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Access-Control_Allow_Origin": "*",
+          'Authorization': 'Bearer $token'
+        },
+    );
+    if (res.statusCode == 202) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<List<Chore>?> getGeneratedChores(int placeId) async {
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.generateChores;
+    final response = await http.get(
+        Uri.parse(url).replace(queryParameters: {
+          'placeId': placeId
+        }.map((key, value) => MapEntry(key, value.toString()))),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        }
+    );
+    if (response.statusCode == 200) {
+      var parsed = jsonDecode(response.body) as List;
+      //List<User> usersList = parsed.map((tagJson) => User.fromJson(tagJson,''))
+      List<Chore> choreList = parsed.map((tagJson) => Chore.fromJson(tagJson))
+          .toList();
+      return choreList;
+    } else {
+      return null;
+    }
+
+  }
+
+  Future<bool> saveListOfChores(List<Chore>? choreList, int placeId) async {
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.saveListOfChores;
+    var res = await http.post(
+        Uri.parse(url).replace(queryParameters: {
+          'placeId': placeId
+        }.map((key, value) => MapEntry(key, value.toString()))),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Access-Control_Allow_Origin": "*",
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode(choreList!.map((e) => e.toJson()).toList())
+      //body: json.encode({'choreId': chore.choreId, 'choreName': chore.choreName, 'status': chore.status.toString(), 'when': chore.when?.toIso8601String()})
+    );
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:chores/screens/add_user_screen/add_user_screen.dart';
 import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
 import 'package:chores/screens/create_place_screen/create_place_screen.dart';
+import 'package:chores/screens/generating_screen/generating_screen.dart';
 import 'package:chores/screens/login_screen/login_screen.dart';
 import 'package:chores/screens/place_screen/place_screen.dart';
 import 'package:chores/screens/place_selection_screen/place_selection_screen.dart';
@@ -80,7 +81,9 @@ class MyApp extends StatelessWidget {
           AddUserScreen.routeName: (context) =>
               const AddUserScreen(),
           ShowUsersScreen.routeName: (context) =>
-              const ShowUsersScreen()
+              const ShowUsersScreen(),
+          GeneratingScreen.routeName: (context) =>
+              const GeneratingScreen(),
 
 
         }

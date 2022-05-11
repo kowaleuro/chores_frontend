@@ -30,4 +30,17 @@ class ApiConstants{
 
   //Get Users SubscribedToPlace
   static const String getUsersOfPlace = '/api/v1/place/getSubscribedUsers';
+
+  //update Chore Status
+  static const String changeChoreStatus = '/api/v1/place/updateChoreStatus';
+
+  //subscribe to Chore
+  static const String subscribeToChore = '/api/v1/place/subscribeToChore';
+
+  //generate Chores
+  static const String generateChores = '/api/v1/generator';
+
+  //save list of Chores
+  static const String saveListOfChores = '/api/v1/place/addMultipleChores';
+
 }
