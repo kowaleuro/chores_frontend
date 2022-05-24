@@ -1,16 +1,12 @@
-# chores
+## Setup in Android Studio
+1.Run Spring Project, where API is implemented
 
-A new Flutter project.
+2.Select Android Device in your project. If you don't have any, then create new one with AS emulator
 
-## Getting Started
+3.Run Flutter Project
 
-This project is a starting point for a Flutter application.
+## Version
 
-A few resources to get you started if this is your first Flutter project:
+Flutter: 2.10.4
+Dart: 2.16.2
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
