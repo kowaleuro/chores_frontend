@@ -1,4 +1,3 @@
-import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
 import 'package:chores/screens/create_place_screen/create_place_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -7,6 +6,7 @@ import '../../core/http_service.dart';
 import '../../main.dart';
 import '../../models/Place.dart';
 import '../place_screen/place_screen.dart';
+import '../welcome_screen/welcome_screen.dart';
 
 class PlaceSelectionScreen extends StatefulWidget {
   const PlaceSelectionScreen({Key? key}) : super(key: key);
@@ -95,24 +95,23 @@ class _PlaceSelectionScreenState extends State<PlaceSelectionScreen> {
       //       //     tooltip: 'Increment',
       //       //     child: const Icon(Icons.add),
       //       //     elevation: 2.0),
+
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         backgroundColor: const Color.fromRGBO(81, 56, 135, 1),
         children: [
           SpeedDialChild(
+            child: const Icon(Icons.logout_rounded),
+            label: 'Logout',
+            onTap: () {
+              storage.delete(key: 'jwt');
+              myNavigatorKey.currentState?.pushReplacementNamed(WelcomeScreen.routeName);},
+          ),
+          SpeedDialChild(
             child: const Icon(Icons.add_circle),
             label: 'Create',
             onTap: () {myNavigatorKey.currentState?.pushNamed(CreatePlaceScreen.routeName);},
           ),
-          SpeedDialChild(
-              child: const Icon(Icons.arrow_circle_right),
-              label: 'Join',
-              // onTap: () {HttpService().joinPlace('bartek@test.pl', 52);},
-              onTap: () {myNavigatorKey.currentState?.pushNamed(CreateChoreScreen.routeName,
-                  arguments: {'placeId':52}
-              );},
-          ),
-
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

@@ -43,4 +43,10 @@ class ApiConstants{
   //save list of Chores
   static const String saveListOfChores = '/api/v1/place/addMultipleChores';
 
+  //delete place
+  static const String deletePlaceEndpoint = '/api/v1/place';
+
+  //unSubscribe from place
+  static const String unSubscribeFromPlaceEndpoint = '/api/v1/place/unsubscribeFromPlace';
+
 }

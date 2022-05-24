@@ -94,17 +94,6 @@ class _CreateChoreScreenState extends State<CreateChoreScreen> {
                             },
                           ),
                           SizedBox(height: 20,),
-
-                          ElevatedButton(
-                            onPressed:() {_selectTime(context);},
-                            style:
-                            ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 54),
-                              primary: const Color.fromRGBO(81, 56, 135, 1),
-                            ), child: Text("Time:  ${selectedTime.format(context)}"),
-                          ),
-
-                          SizedBox(height: 20,),
                           ElevatedButton(
                             onPressed: () {
                               if (_createChoreKey.currentState!.validate()) {
@@ -133,27 +122,48 @@ class _CreateChoreScreenState extends State<CreateChoreScreen> {
       ),
     );
   }
-  _selectTime(BuildContext context) async {
-    final TimeOfDay? timeOfDay = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-      initialEntryMode: TimePickerEntryMode.dial,
-    );
-    if(timeOfDay != null && timeOfDay != selectedTime)
-    {
-      setState(() {
-        selectedTime = timeOfDay;
-      });
+  void _createChore(int placeId) async{
+    //Chore chore
+    if(_selectedDay != null) {
+      DateTime dateTime = DateTime(
+          _selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
+      Chore chore = Chore(null, _choreName, Status.OPEN, dateTime, null);
+      bool ret = (await HttpService().createChore(chore, placeId));
+      if (ret == true) {
+        Navigator.pop(context);
+      }
+    }else{
+      _showMyDialog();
     }
   }
 
-  void _createChore(int placeId) async{
-    //Chore chore
-    DateTime dateTime = DateTime(_selectedDay!.year,_selectedDay!.month,_selectedDay!.day,selectedTime.hour,selectedTime.minute);
-    Chore chore = Chore(null, _choreName, Status.OPEN, dateTime,null);
-    bool ret = (await HttpService().createChore(chore, placeId));
-    if (ret == true){
-      Navigator.pop(context);
-    }
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Remember to select the day!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children:  <Widget>[
+                SvgPicture.asset(
+                  'assets/images/createPlace.svg',
+                  height: 140,
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

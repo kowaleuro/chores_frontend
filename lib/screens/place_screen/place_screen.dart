@@ -1,14 +1,18 @@
 
 import 'dart:collection';
+import 'dart:ffi';
 
 import 'package:chores/models/User.dart';
 import 'package:chores/models/status.dart';
 import 'package:chores/screens/add_user_screen/add_user_screen.dart';
 import 'package:chores/screens/create_chore_screen/create_chore_screen.dart';
 import 'package:chores/screens/generating_screen/generating_screen.dart';
+import 'package:chores/screens/place_selection_screen/place_selection_screen.dart';
 import 'package:chores/screens/show_users_screen/show_users_screen.dart';
+import 'package:chores/screens/welcome_screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '../../core/http_service.dart';
@@ -70,8 +74,10 @@ class _PlaceScreenState extends State<PlaceScreen> {
 
   _groupEvents(List<Chore> chores) {
     _groupedEvents = LinkedHashMap(equals: isSameDay, hashCode: getHashCode);
+    chores.sort((a, b) => b.status.toString().compareTo(a.status.toString()));
     chores.forEach((chore) {
-      DateTime date = chore.when!;
+      DateTime date = chore.when!.add(new Duration(hours: 2));
+      print(date);
       if (_groupedEvents![date] == null) {
         _groupedEvents![date] = [];
       }
@@ -190,8 +196,12 @@ class _PlaceScreenState extends State<PlaceScreen> {
                               color: Colors.red,
                               icon: const Icon(Icons.highlight_off_outlined),
                               onPressed: () {
-                                chore.status = Status.FINISHED;
-                                updateStatus(chore);
+                                if (chore.when!.add(new Duration(hours: 2)).isBefore(DateTime.now())) {
+                                  chore.status = Status.FINISHED;
+                                  updateStatus(chore);
+                                }else{
+                                  _showMyDialog();
+                                }
                                 },),
                           children: <Widget>[
                             FutureBuilder(
@@ -266,7 +276,16 @@ class _PlaceScreenState extends State<PlaceScreen> {
           SpeedDialChild(
             child: const Icon(Icons.logout_rounded),
             label: 'Logout',
-            //onTap: () {myNavigatorKey.currentState?.pushNamed(CreatePlaceScreen.routeName);},
+            onTap: () {
+              storage.delete(key: 'jwt');
+              myNavigatorKey.currentState?.pushReplacementNamed(WelcomeScreen.routeName);},
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.delete_sweep_outlined),
+            label: 'Delete place',
+            onTap: () {
+              _deletePlaceDialog();
+            }
           ),
           SpeedDialChild(
             child: const Icon(Icons.attribution_rounded),
@@ -276,6 +295,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                   arguments: {'placeId': placeId}).then((value) {
                 setState(() {
                   place = getPlace(placeId);
+                  users = getUsers(placeId);
                 });
               })
               ;},
@@ -288,6 +308,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                   arguments: {'placeId': placeId}).then((value) {
                 setState(() {
                   place = getPlace(placeId);
+                  users = getUsers(placeId);
                 });
               })
               ;},
@@ -356,6 +377,68 @@ class _PlaceScreenState extends State<PlaceScreen> {
         place = getPlace(placeId);
       });
     }
+  }
+
+
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('You cant close the future task.'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children:  <Widget>[
+                SvgPicture.asset(
+                  'assets/images/puffy.svg',
+                  height: 140,
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deletePlaceDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure you want to delete this place?'),
+          content: Image.asset('assets/images/img.png'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('YES'),
+              onPressed: () async {
+                await HttpService().deletePlace(placeId);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => PlaceSelectionScreen()),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('NO'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

@@ -73,7 +73,7 @@ class HttpService {
         body: json.encode({
           'email': user.email,
           'password': user.password,
-          'nickname': user.nickname
+          'nickname': nickname
         }));
     if (res.statusCode == 201) {
       return true;
@@ -199,16 +199,14 @@ class HttpService {
     String? token = await storage.read(key: 'jwt');
     String url = ApiConstants.baseUrl + ApiConstants.joinPlaceEndpoint;
     var res = await http.post(
-        Uri.parse(url).replace(queryParameters: {
-          'placeId': placeId
-        }.map((key, value) => MapEntry(key, value.toString()))),
+        Uri.parse(url),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
           "Access-Control_Allow_Origin": "*",
           'Authorization': 'Bearer $token'
         },
-        body: jsonEncode({'email':email})
+        body: jsonEncode({'email':email,'placeId': placeId})
     );
     print(res.statusCode);
     print(res.body);
@@ -335,4 +333,50 @@ class HttpService {
       return false;
     }
   }
+
+  Future<bool> deletePlace(placeId) async{
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.deletePlaceEndpoint;
+    var res = await http.delete(
+        Uri.parse(url).replace(queryParameters: {
+          'placeId': placeId
+        }.map((key, value) => MapEntry(key, value.toString()))),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Access-Control_Allow_Origin": "*",
+          'Authorization': 'Bearer $token'
+        },
+    );
+    print('fd');
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> unsubscribeUserFromPlace(String email, int placeId) async{
+    if(email == ''){
+      return false;
+    }
+    String? token = await storage.read(key: 'jwt');
+    String url = ApiConstants.baseUrl + ApiConstants.unSubscribeFromPlaceEndpoint;
+    var res = await http.delete(
+      Uri.parse(url),
+      headers: {
+        "Accept": "application/json",
+        "content-type": "application/json",
+        "Access-Control_Allow_Origin": "*",
+        'Authorization': 'Bearer $token'
+      },
+      body: jsonEncode({'email':email,'placeId': placeId})
+    );
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
